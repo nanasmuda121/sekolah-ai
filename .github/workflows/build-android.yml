@@ -31,6 +31,14 @@ jobs:
           ndk-version: r26b
           link-to-sdk: true
 
+      - name: Ensure Gradle Wrapper
+        run: |
+          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
+            echo "Mengunduh gradle-wrapper.jar..."
+            curl -sLo gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.4.0/gradle/wrapper/gradle-wrapper.jar
+          fi
+          chmod +x gradlew
+
       # Download model AI offline Qwen2.5-0.5B (~350MB) ke assets
       - name: Download Offline AI Model (Qwen2.5-0.5B GGUF)
         run: |
