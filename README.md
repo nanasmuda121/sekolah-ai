@@ -1,48 +1,57 @@
-# 🎓 Sekolah AI - Tutor Pelajaran Mandiri 100% Offline
+# 🍍 NanasAi — Belajar Tanpa Menunggu Wi-Fi.
 
-Aplikasi Android edukasi mandiri yang dirancang khusus untuk berjalan lancar di HP dengan **RAM 1 GB ke bawah** (termasuk 750 MB RAM) secara **100% Offline** tanpa kuota internet.
+> **Teman Belajar, Bahkan Saat Offline.**  
+> Diciptakan oleh **Adnan Ferdiansyah**
+
+NanasAi adalah asisten belajar yang diciptakan oleh Adnan Ferdiansyah dengan tujuan membantu pelajar mendapatkan bantuan belajar tanpa harus selalu bergantung pada koneksi internet.
+
+Dengan konsep AI yang siap membantu walau offline, NanasAi dirancang sebagai teman belajar yang tetap dapat digunakan ketika Wi-Fi mati, kuota habis, atau koneksi internet sedang tidak tersedia.
 
 ---
 
-## ✨ Fitur Utama
+## 🎯 Tujuan NanasAi
+Membantu pelajar belajar dengan lebih mudah, cepat, dan mandiri—tanpa terkendala masalah koneksi internet.
 
-1. **AI Chat & Tutor Bebas:**
-   - **Matematika (MTK):** Menyelesaikan rumus aljabar, geometri, dan Teorema Pythagoras secara bertahap (langkah demi langkah).
-   - **Sejarah:** Menjelaskan kronologi peristiwa bersejarah Indonesia dan dunia, tokoh penting, dan latar belakang.
-   - **Bahasa Inggris:** Melatih percakapan, menerjemahkan, menganalisis *grammar* & *tenses*.
-   - **PPKn & Agama:** Menjawab konsep kewarganegaraan, Pancasila, UUD 1945, serta pendidikan budi pekerti.
-2. **Vision & Kamera Soal (Mata):**
-   - Siswa bisa memotret soal lembar kerja siswa (LKS), buku paket, atau tulisan soal di papan tulis.
-   - Mesin OCR mengekstrak angka, rumus, dan pertanyaan secara otomatis.
-3. **ReactBits Prompt-Bar (Micro Interaction):**
-   - Komponen input bar modern terinspirasi dari [reactbits.dev](https://reactbits.dev/micro/prompt-bar).
-   - Tombol kamera instan, selektor mata pelajaran (chips), dan animasi status kirim.
-4. **Ringan & Aman di RAM 1 GB:**
-   - Menggunakan bridge C++ native untuk inferensi hemat memori.
-   - Menggunakan model `Qwen2.5-0.5B-Instruct` versi kuantisasi Q4.
+## 💡 Filosofi Nama
+* **Nanas** melambangkan sesuatu yang sederhana, dekat, dan mudah dikenali.
+* **Ai** berarti Artificial Intelligence, teknologi yang digunakan untuk membantu proses belajar.
+* **Gagasan Utama:** *“Belajar tidak harus menunggu Wi-Fi.”*
+
+## 👨‍💻 Diciptakan oleh
+**Adnan Ferdiansyah**  
+Seorang pengembang yang memiliki gagasan untuk menghadirkan teknologi pembelajaran yang dapat tetap bermanfaat bagi pelajar, termasuk ketika akses internet terbatas.
+
+## 🚀 Visi & 🤝 Misi
+* **Visi:** Mewujudkan asisten belajar yang dapat diakses pelajar kapan saja dan di mana saja, termasuk dalam kondisi tanpa koneksi internet.
+* **Misi:**
+  - Membantu pelajar memahami materi dengan lebih mudah.
+  - Menyediakan bantuan belajar yang praktis.
+  - Mengurangi ketergantungan terhadap koneksi internet.
+  - Mendorong pelajar untuk belajar secara mandiri.
+  - Mengembangkan teknologi AI yang lebih mudah diakses.
+
+---
+
+## ✨ Fitur Unggulan
+
+1. **AI Chatbot Terpadu (Tanpa Pemisah):**
+   - Siswa bisa bertanya apa saja secara langsung layaknya chatbot cerdas (Matematika, IPA, Sejarah, Bahasa Inggris, PPKn, Agama, dll).
+2. **Kamera & Vision Soal Matematika (Pythagoras & Aljabar):**
+   - Siswa cukup memotret soal lembar kerja atau diagram segitiga siku-siku di buku.
+   - NanasAi mendeteksi angka dan menyajikan rumus serta langkah perhitungan secara bertahap hingga kesimpulan akhir.
+3. **PromptBar Micro-Interaction (Inspirasi ReactBits):**
+   - Tampilan input bar gelap elegan dengan sudut rounded.
+   - Tombol kamera instan dan tombol kirim dinamis.
+4. **Arsitektur Hemat RAM (Kotlin + C++ Native):**
+   - Bebas dari overhead JavaScript engine.
+   - Menggunakan memori hanya ~15–25 MB untuk UI, sehingga sisa RAM sangat lega untuk perangkat dengan **RAM 750 MB – 1 GB**.
 
 ---
 
 ## 🛠️ Arsitektur Teknologi
 
-* **Frontend:** React Native 0.76 (TypeScript)
-* **Native Core:** C++17 Android NDK (JNI Bridge)
-* **Vision / OCR:** ML Kit Text Recognition
-* **LLM Engine:** `llama.cpp` + `Qwen2.5-0.5B-Instruct-Q4_K_M.gguf`
-* **CI/CD:** GitHub Actions (Build otomatis ke file APK & GitHub Releases)
-
----
-
-## 🚀 Build Otomatis via GitHub Actions
-
-Kamu tidak perlu meng-compile secara lokal di komputer yang berat. Cukup push repositori ini ke GitHub:
-
-1. Buat repository baru di GitHub:
-   ```bash
-   gh repo create sekolah-ai --public --source=. --remote=origin --push
-   ```
-2. Workflow GitHub Actions di `.github/workflows/build-android.yml` akan berjalan otomatis:
-   - Menyiapkan NDK & Java 17.
-   - Mengunduh bobot model `Qwen2.5-0.5B` otomatis dari Hugging Face.
-   - Meng-compile APK Release (`SekolahAI-Offline-Release-APK`).
-3. Kamu bisa langsung mengunduh file `.apk` hasil build di tab **Actions** atau tab **Releases** di GitHub!
+* **Bahasa:** Kotlin (Android Native) & C++17
+* **Build System:** Gradle 8.3 & CMake 3.22 (Android NDK)
+* **Vision / OCR:** Google ML Kit Text Recognition (On-Device Offline)
+* **AI Core:** C++ Native Inference Engine (`nanas_ai.so`) + Model GGUF Kuantisasi Q4
+* **CI/CD:** GitHub Actions otomatis meng-compile release APK

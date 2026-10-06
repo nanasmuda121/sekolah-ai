@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NanasAi</string>
+    <string name="slogan">NanasAi — Belajar Tanpa Menunggu Wi-Fi.</string>
+    <string name="subtitle">Teman Belajar, Bahkan Saat Offline.</string>
+    <string name="prompt_placeholder">Tanya Sesuatu...</string>
+    <string name="offline_badge">100% Offline</string>
+    <string name="creator_note">Diciptakan oleh Adnan Ferdiansyah</string>
+</resources>

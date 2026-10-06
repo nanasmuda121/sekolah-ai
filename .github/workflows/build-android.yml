@@ -1,17 +1,15 @@
-name: Build & Release Android Offline AI APK
+name: Build & Release NanasAi APK (Kotlin + C++)
 
 on:
   push:
     branches: [ "main" ]
     tags:
       - 'v*'
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build Android Release APK
+    name: Build NanasAi Release APK
     runs-on: ubuntu-latest
 
     steps:
@@ -24,12 +22,8 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: 'package.json'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1
@@ -37,56 +31,56 @@ jobs:
           ndk-version: r26b
           link-to-sdk: true
 
-      - name: Install NPM Dependencies
-        run: |
-          npm install --legacy-peer-deps
-
-      # Unduh Model Offline Qwen2.5-0.5B Q4_K_M (~350 MB) ke folder assets
+      # Download model AI offline Qwen2.5-0.5B (~350MB) ke assets
       - name: Download Offline AI Model (Qwen2.5-0.5B GGUF)
         run: |
-          mkdir -p android/app/src/main/assets/models
+          mkdir -p app/src/main/assets/models
           echo "Mengunduh model Qwen2.5-0.5B-Instruct Q4_K_M..."
-          curl -L -o android/app/src/main/assets/models/qwen2.5-0.5b-q4.gguf \
+          curl -L -o app/src/main/assets/models/qwen2.5-0.5b-q4.gguf \
             https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf
-          ls -lh android/app/src/main/assets/models/
+          ls -lh app/src/main/assets/models/
 
-      # Buat debug.keystore jika belum ada untuk signing release
+      # Buat keystore otomatis untuk signing APK Release
       - name: Create Keystore for APK Signing
         run: |
-          cd android/app
+          cd app
           if [ ! -f debug.keystore ]; then
-            keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=AndroidDebug,O=Android,C=US"
+            keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=NanasAi,O=AdnanFerdiansyah,C=ID"
           fi
 
-      # Build APK Android
-      - name: Build Android Release APK
+      # Build APK Android Release murni Kotlin + C++
+      - name: Build APK Release
         run: |
-          cd android
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
 
-      # Upload file APK ke GitHub Artifacts (Dapat diunduh langsung di tab Actions)
+      # Upload APK ke GitHub Artifacts
       - name: Upload APK ke Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: SekolahAI-Offline-Release-APK
-          path: android/app/build/outputs/apk/release/*.apk
+          name: NanasAi-Release-APK
+          path: app/build/outputs/apk/release/*.apk
           retention-days: 14
 
-      # Buat Rilis Otomatis di Tab Releases jika push tag git (contoh: v1.0.0)
+      # Publikasikan ke GitHub Releases jika ada tag release (contoh: v1.0.0)
       - name: Publish ke GitHub Releases
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: android/app/build/outputs/apk/release/*.apk
+          files: app/build/outputs/apk/release/*.apk
           tag_name: ${{ github.ref_name }}
-          name: "Rilis Sekolah AI ${{ github.ref_name }}"
+          name: "🍍 NanasAi ${{ github.ref_name }}"
           body: |
-            ## 🎓 Sekolah AI - Tutor Mandiri 100% Offline
-            
-            - **Mata Pelajaran:** Matematika (Pythagoras & Aljabar), Sejarah, B. Inggris, PKn, Agama.
-            - **Dukungan Vision:** Kamera / Foto Soal & Deteksi Angka/Teks.
-            - **Kompatibilitas:** Dirancang khusus untuk HP dengan RAM 1 GB ke bawah.
-            - **Koneksi:** 100% Offline, tanpa kuota internet.
+            ## 🍍 NanasAi — Belajar Tanpa Menunggu Wi-Fi.
+
+            **Teman Belajar, Bahkan Saat Offline.**
+            Diciptakan oleh **Adnan Ferdiansyah**.
+
+            ### 🚀 Fitur Unggulan:
+            - **100% Offline & Mandiri:** Dapat digunakan saat Wi-Fi mati, kuota habis, atau tanpa internet.
+            - **Hemat RAM:** Dibangun dengan arsitektur **Kotlin + C++ Native**, sangat lancar di HP dengan RAM 750 MB – 1 GB.
+            - **Dukungan Kamera (Vision):** Foto soal buku paket / lembar ujian matematika (Pythagoras, aljabar, dsb.) langsung dianalisis langkah demi langkah.
+            - **Chatbot Edukasi Serba Bisa:** Matematika, Sejarah, Bahasa Inggris, PPKn, Agama, dll.
+            - **Desain Modern:** Mengadopsi PromptBar micro-interaction ala ReactBits yang elegan.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
