@@ -1,4 +1,4 @@
-package com.adnan.nanasai
+package com.nanasai.nanas
 
 object NanasAiIdentity {
     const val NAME = "NanasAi"

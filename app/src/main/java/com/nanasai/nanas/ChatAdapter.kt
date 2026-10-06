@@ -1,4 +1,4 @@
-package com.adnan.nanasai
+package com.nanasai.nanas
 
 import android.view.LayoutInflater
 import android.view.View

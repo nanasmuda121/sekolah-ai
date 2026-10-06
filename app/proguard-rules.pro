@@ -1,7 +1,7 @@
 # Project specific ProGuard / R8 rules for NanasAi
 
 # 1. Pertahankan semua kelas aplikasi NanasAi
--keep class com.adnan.nanasai.** { *; }
+-keep class com.nanasai.nanas.** { *; }
 
 # 2. Pertahankan metode native C++ (JNI) agar tidak di-obfuscate / dihapus
 -keepclasseswithmembernames class * {

@@ -12,7 +12,7 @@ static bool g_model_ready = false;
 static std::string g_model_path = "";
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_adnan_nanasai_NanasAiNative_initModel(
+Java_com_nanasai_nanas_NanasAiNative_initModel(
     JNIEnv* env,
     jobject /* this */,
     jstring modelPath) {
@@ -32,7 +32,7 @@ Java_com_adnan_nanasai_NanasAiNative_initModel(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_adnan_nanasai_NanasAiNative_generateResponse(
+Java_com_nanasai_nanas_NanasAiNative_generateResponse(
     JNIEnv* env,
     jobject /* this */,
     jstring promptStr) {

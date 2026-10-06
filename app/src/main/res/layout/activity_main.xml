@@ -135,7 +135,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Teman belajar yang siap membantu walau offline, kuota habis, atau tanpa internet. Tanyakan apa saja: Matematika (Pythagoras & aljabar), Sejarah, B. Inggris, PKn, Agama, atau cukup foto soal di bukum!"
+                android:text="Teman belajar yang siap membantu walau offline, kuota habis, atau tanpa internet. Tanyakan apa saja: Matematika (Pythagoras dan aljabar), Sejarah, B. Inggris, PKn, Agama, atau cukup foto soal di bukum!"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:lineSpacingExtra="3dp"
@@ -156,7 +156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📐 Hitung Pythagoras: Segitiga siku-siku alas 6 cm &amp; tinggi 8 cm"
+                    android:text="📐 Hitung Pythagoras: Segitiga siku-siku alas 6 cm dan tinggi 8 cm"
                     android:textColor="@color/text_primary"
                     android:textSize="12sp" />
             </LinearLayout>

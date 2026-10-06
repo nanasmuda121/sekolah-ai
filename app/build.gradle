@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.adnan.nanasai'
+    namespace 'com.nanasai.nanas'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.adnan.nanasai"
+        applicationId "com.nanasai.nanas"
         minSdk 21
         targetSdk 34
         versionCode 1

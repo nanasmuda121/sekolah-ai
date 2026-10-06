@@ -1,4 +1,4 @@
-package com.adnan.nanasai
+package com.nanasai.nanas
 
 import android.app.AlertDialog
 import android.graphics.Color
