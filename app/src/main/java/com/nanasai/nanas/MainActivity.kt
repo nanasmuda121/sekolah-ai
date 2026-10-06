@@ -202,19 +202,28 @@ class MainActivity : AppCompatActivity() {
         etPrompt.setText("")
         clearAttachment()
 
-        // Query NanasAi offline
+        // Query NanasAi offline with real-time thinking indicator
         lifecycleScope.launch {
+            val thinkingMsg = ChatMessage(
+                text = "🍍 NanasAi sedang berpikir...",
+                isUser = false,
+                timestamp = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+            )
+            chatAdapter.addMessage(thinkingMsg)
+            val thinkingPos = messages.size - 1
+            rvChat.scrollToPosition(thinkingPos)
+
             val reply = withContext(Dispatchers.IO) {
                 NanasAiNative.ask(fullPrompt)
             }
 
-            val nanasMsg = ChatMessage(
+            messages[thinkingPos] = ChatMessage(
                 text = reply,
                 isUser = false,
                 timestamp = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
             )
-            chatAdapter.addMessage(nanasMsg)
-            rvChat.scrollToPosition(messages.size - 1)
+            chatAdapter.notifyItemChanged(thinkingPos)
+            rvChat.scrollToPosition(thinkingPos)
         }
     }
 

@@ -42,6 +42,22 @@ jobs:
           fi
           chmod +x gradlew
 
+      # Siapkan sub-library llama.cpp
+      - name: Setup llama.cpp
+        run: |
+          if [ ! -d app/src/main/cpp/llama ]; then
+            git clone --depth 1 https://github.com/ggml-org/llama.cpp app/src/main/cpp/llama
+          fi
+
+      # Download model AI offline Qwen2.5-0.5B (~350MB) ke assets
+      - name: Download Offline AI Model (Qwen2.5-0.5B GGUF)
+        run: |
+          mkdir -p app/src/main/assets/models
+          echo "Mengunduh model Qwen2.5-0.5B-Instruct Q4_K_M..."
+          curl -L -o app/src/main/assets/models/qwen2.5-0.5b-q4.gguf \
+            https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf
+          ls -lh app/src/main/assets/models/
+
       # Buat keystore otomatis untuk signing APK Release
       - name: Create Keystore for APK Signing
         run: |
@@ -70,7 +86,7 @@ jobs:
           cp app/build/outputs/apk/release/*-release.apk app/build/outputs/apk/release/NanasAi.apk || cp app/build/outputs/apk/release/*.apk app/build/outputs/apk/release/NanasAi.apk
           ls -lh app/build/outputs/apk/release/
 
-      # Publikasikan ke GitHub Releases jika ada tag release (contoh: v1.0.3)
+      # Publikasikan ke GitHub Releases jika ada tag release (contoh: v1.0.4)
       - name: Publish ke GitHub Releases
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
@@ -85,10 +101,10 @@ jobs:
             Diciptakan oleh **Adnan Ferdiansyah**.
 
             ### 🚀 Fitur Unggulan:
-            - **100% Offline & Mandiri:** Dapat digunakan saat Wi-Fi mati, kuota habis, atau tanpa internet.
-            - **Hemat RAM:** Dibangun dengan arsitektur **Kotlin + C++ Native**, sangat lancar di HP dengan RAM 750 MB – 1 GB.
-            - **Dukungan Kamera (Vision):** Foto soal buku paket / lembar ujian matematika (Pythagoras, aljabar, dsb.) langsung dianalisis langkah demi langkah.
-            - **Chatbot Edukasi Serba Bisa:** Matematika, Sejarah, Bahasa Inggris, PPKn, Agama, dll.
+            - **Generative LLM On-Device (Qwen2.5-0.5B Instruct):** Bebas ditanya apa saja secara mandiri tanpa internet / tanpa kuota.
+            - **100% Offline & Mandiri:** Dapat digunakan saat Wi-Fi mati, kuota habis, atau di daerah pelosok.
+            - **Dukungan Kamera (Vision OCR):** Foto lembar ujian atau buku paket langsung terbaca otomatis.
+            - **Chatbot Edukasi Serba Bisa:** Matematika, Sejarah, Sains, Bahasa Inggris, PPKn, Agama, dan Obrolan Bebas.
             - **Desain Modern:** Mengadopsi PromptBar micro-interaction ala ReactBits yang elegan.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

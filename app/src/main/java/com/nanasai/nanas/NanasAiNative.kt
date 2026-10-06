@@ -2,6 +2,8 @@ package com.nanasai.nanas
 
 import android.content.Context
 import android.util.Log
+import java.io.File
+import java.io.FileOutputStream
 
 object NanasAiNative {
     private const val TAG = "NanasAiNative"
@@ -25,10 +27,28 @@ object NanasAiNative {
 
     fun setup(context: Context): Boolean {
         if (!isInitialized) return false
+
         try {
-            isModelLoaded = initModel("internal")
-            Log.i(TAG, "NanasAi Native Engine ready: $isModelLoaded")
-            return isModelLoaded
+            val modelFile = File(context.filesDir, "qwen2.5-0.5b-q4.gguf")
+            if (!modelFile.exists() || modelFile.length() < 100000000L) {
+                try {
+                    Log.i(TAG, "Mengekstrak model GGUF dari assets...")
+                    context.assets.open("models/qwen2.5-0.5b-q4.gguf").use { input ->
+                        FileOutputStream(modelFile).use { output ->
+                            input.copyTo(output)
+                        }
+                    }
+                    Log.i(TAG, "Model berhasil diekstrak ke: ${modelFile.absolutePath}")
+                } catch (e: Exception) {
+                    Log.w(TAG, "Asset model belum tersedia: ${e.message}")
+                }
+            }
+
+            if (modelFile.exists() && modelFile.length() > 100000000L) {
+                isModelLoaded = initModel(modelFile.absolutePath)
+                Log.i(TAG, "Inisialisasi LLM model sukses: $isModelLoaded")
+                return isModelLoaded
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Setup error: ${e.message}")
         }
@@ -36,18 +56,19 @@ object NanasAiNative {
     }
 
     fun ask(prompt: String): String {
+        // 1. Coba inferensi LLM neural network asli (Qwen2.5-0.5B via llama.cpp)
         if (isInitialized && isModelLoaded) {
             try {
-                val nativeOutput = generateResponse(prompt)
-                if (nativeOutput.isNotBlank()) {
-                    return nativeOutput.trim()
+                val llmOutput = generateResponse(prompt)
+                if (llmOutput.isNotBlank()) {
+                    return llmOutput.trim()
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Native generate error: ${e.message}")
+                Log.e(TAG, "LLM generate error: ${e.message}")
             }
         }
 
-        // Jalankan NanasAi Dynamic Conversational & Knowledge Engine
+        // 2. Fallback otomatis ke NanasAi Knowledge & Math Engine
         return NanasAiEngine.processQuery(prompt)
     }
 }
