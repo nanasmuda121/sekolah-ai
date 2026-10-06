@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         // Init C++ AI Engine in background
         lifecycleScope.launch(Dispatchers.IO) {
-            NanasAiNative.setup()
+            NanasAiNative.setup(applicationContext)
         }
     }
 

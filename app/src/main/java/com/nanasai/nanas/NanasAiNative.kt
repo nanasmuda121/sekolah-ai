@@ -1,10 +1,13 @@
 package com.nanasai.nanas
 
+import android.content.Context
 import android.util.Log
 
 object NanasAiNative {
     private const val TAG = "NanasAiNative"
     var isInitialized = false
+        private set
+    var isModelLoaded = false
         private set
 
     init {
@@ -20,18 +23,31 @@ object NanasAiNative {
     private external fun initModel(modelPath: String): Boolean
     private external fun generateResponse(prompt: String): String
 
-    fun setup(modelPath: String = "models/qwen2.5-0.5b-q4.gguf"): Boolean {
+    fun setup(context: Context): Boolean {
         if (!isInitialized) return false
-        return try {
-            initModel(modelPath)
+        try {
+            isModelLoaded = initModel("internal")
+            Log.i(TAG, "NanasAi Native Engine ready: $isModelLoaded")
+            return isModelLoaded
         } catch (e: Exception) {
-            Log.e(TAG, "initModel error: ${e.message}")
-            false
+            Log.e(TAG, "Setup error: ${e.message}")
         }
+        return false
     }
 
     fun ask(prompt: String): String {
-        // Gunakan NanasAi Intelligent Offline Engine
+        if (isInitialized && isModelLoaded) {
+            try {
+                val nativeOutput = generateResponse(prompt)
+                if (nativeOutput.isNotBlank()) {
+                    return nativeOutput.trim()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Native generate error: ${e.message}")
+            }
+        }
+
+        // Jalankan NanasAi Dynamic Conversational & Knowledge Engine
         return NanasAiEngine.processQuery(prompt)
     }
 }
