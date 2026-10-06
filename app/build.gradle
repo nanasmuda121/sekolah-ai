@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.nanasai.nanas"
-        minSdk 21
+        minSdk 26
         targetSdk 34
         versionCode 1
         versionName "1.0.0"
@@ -20,6 +20,7 @@ android {
             cmake {
                 cppFlags "-O3 -flto -std=c++17"
                 arguments "-DANDROID_STL=c++_shared",
+                          "-DANDROID_PLATFORM=android-26",
                           "-DGGML_NATIVE=OFF",
                           "-DGGML_OPENMP=OFF",
                           "-DGGML_LLAMAFILE=OFF",
