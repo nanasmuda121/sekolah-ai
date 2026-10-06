@@ -7,6 +7,9 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build NanasAi Release APK
@@ -70,12 +73,18 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
           retention-days: 14
 
-      # Publikasikan ke GitHub Releases jika ada tag release (contoh: v1.0.0)
+      # Siapkan nama file direct APK: NanasAi.apk
+      - name: Prepare Direct APK
+        run: |
+          cp app/build/outputs/apk/release/*-release.apk app/build/outputs/apk/release/NanasAi.apk || cp app/build/outputs/apk/release/*.apk app/build/outputs/apk/release/NanasAi.apk
+          ls -lh app/build/outputs/apk/release/
+
+      # Publikasikan ke GitHub Releases jika ada tag release (contoh: v1.0.1)
       - name: Publish ke GitHub Releases
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: app/build/outputs/apk/release/*.apk
+          files: app/build/outputs/apk/release/NanasAi.apk
           tag_name: ${{ github.ref_name }}
           name: "🍍 NanasAi ${{ github.ref_name }}"
           body: |
